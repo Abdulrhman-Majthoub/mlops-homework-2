@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pytest
+flake8
+requests
+fastapi
+uvicorn
+pytest
+flake8
+requests
+httpx

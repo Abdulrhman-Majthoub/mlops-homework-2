@@ -1,0 +1,49 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ---------------- Commit Stage ----------------
+      - name: Run unit tests
+        run: pytest tests/test_feature_engineering.py
+
+      - name: Run linting
+        run: flake8 src tests
+
+      - name: Run integration tests
+        run: pytest tests/test_integration.py
+
+      # ---------------- Build & Package ----------------
+      - name: Build Docker image
+        run: docker build -t mlops-homework2 .
+
+      - name: Run container
+        run: docker run -d -p 8000:8000 --name mlops-app mlops-homework2
+
+      # ---------------- Smoke Test ----------------
+      - name: Run smoke test
+        run: python smoke_test.py
+
+      - name: Stop container
+        if: always()
+        run: docker stop mlops-app || true
