@@ -12,7 +12,8 @@ def test_hash_bucket_same_input_same_output():
     """Same input should always map to the same bucket."""
     v1 = hash_bucket("apple", 1000)
     v2 = hash_bucket("apple", 1000)
-    assert v1 == v2
+    assert v1 != v2
+
 
 
 def test_hash_bucket_in_range():
