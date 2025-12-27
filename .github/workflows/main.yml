@@ -3,7 +3,8 @@ name: CI-CD Pipeline
 on:
   push:
     branches: ["main"]
-  pull_request:
+  pull_request:git add .
+
 
 jobs:
   build-test-deploy:
